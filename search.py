@@ -3,78 +3,48 @@ from math import inf
 
 class Search:
 
-    @staticmethod
     def MSE(bloc_1, bloc_2):
         x, y = bloc_1.shape
         difference = np.square(bloc_1-bloc_2)
         return np.sum(difference)/(x*y)
 
-    @staticmethod
-    def dichotomique_search(target_bloc, searching_image, x, y, BS=16, DELTA=64) -> np.ndarray:
+    def dichotomique_search(target_bloc, searching_image, x, y, size=16, decalage=64) -> np.ndarray:
 
-        step = 32
+        pas = 32
         min_mse = inf
 
-        coord_x = x+DELTA
-        coord_y = y+DELTA
+        coord_x = x+decalage
+        coord_y = y+decalage
 
         min_x = coord_x
         min_y = coord_y
 
         min_bloc = None
 
-        while step >= 1:
-            MOUVEMENTS = [(0, 0), (step, 0), (-step, 0), (0, step), (-step, 0),
-                          (step, step), (-step, -step), (step, -step), (-step, step)]
+        while pas >= 1:
+            MOUVEMENTS = [(0, 0), (pas, 0), (-pas, 0), (0, pas), (-pas, 0),
+                          (pas, pas), (-pas, -pas), (pas, -pas), (-pas, pas)]
 
             for move in MOUVEMENTS:
-                n, m = move
-                coord_x += n
-                coord_y += m
-                current_bloc = searching_image[coord_x:coord_x +
-                                               BS, coord_y:coord_y+BS]
-                if target_bloc.shape == current_bloc.shape:
-                    temp_mse = Search.MSE(target_bloc, current_bloc)
-                    if temp_mse < min_mse:
-                        min_mse = temp_mse
+                a, s = move # x dans a et y dans s
+                coord_x += a
+                coord_y += s
+                bloc = searching_image[coord_x:coord_x + size, coord_y:coord_y+size]
+
+                if target_bloc.shape == bloc.shape:
+
+                    mse = Search.MSE(target_bloc, bloc)
+                    if  mse < min_mse:
+                        min_mse = mse
                         min_x = coord_x
                         min_y = coord_y
-                        min_bloc = current_bloc
+                        min_bloc = bloc
 
-                coord_x -= n
-                coord_y -= m
+                coord_x -= a
+                coord_y -= s
 
-            step //= 2
+            pas //= 2
 
         return min_bloc, min_x, min_y, min_mse
 
-    @staticmethod
-    def sliding_search(target_bloc, searching_image, x, y, x2, y2, dx=7, dy=7, BS=16, DELTA=64) -> np.ndarray:
-
-        WIDTH, HEIGHT = BS, BS
-        DX, DY = dx, dy
-
-        new_x, new_y = x-DX, y-DY
-        new_x2, new_y2 = x2+DX, y2+DY
-
-        search_zone = searching_image[new_x +
-                                      DELTA:new_x2+DELTA, new_y+DELTA:new_y2+DELTA]
-
-        min_mse = inf
-        min_bloc = None
-
-        x_b2 = 0
-        y_b2 = 0
-
-        for n in range(search_zone.shape[0]):
-            for m in range(search_zone.shape[1]):
-                current_bloc = search_zone[n:n+HEIGHT, m:m+WIDTH]
-                if current_bloc.shape == target_bloc.shape:
-                    temp_mse = Search.MSE(target_bloc, current_bloc)
-                    if min_mse > temp_mse:
-                        min_mse = temp_mse
-                        x_b2 = n
-                        y_b2 = m
-                        min_bloc = current_bloc
-
-        return search_zone, min_bloc, x_b2, y_b2, min_mse
+    

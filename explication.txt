@@ -1,0 +1,122 @@
+multimedia : 
+
+ALGORITHME DICHOTOMIQUE (explication geenrale) :
+
+init : 
+zone de recherche definie par K.
+dans chaque iteration 9 positions sont evalué .
+la premiere evaluation se fait au centre de la zone de recherche .
+et les huit autres qont des vercteurs avec fraction de k .
+
+1ere iteration : 
+
+ Les neuf positions évaluées dans la première itération sont utilisées 
+comme points de départ pour trouver la meilleure correspondance 
+(minimum de la fonction de coût). À ce stade, le mouvement initial est trouvé.
+
+iteration suivante : 
+
+le centre de la nouvelle zone de recherche est deplacé vers la meilleur correspondance
+(li l9inaha mou9bil), la taille de la zone de recherche est reduite a la moitié a chaque
+itération suivante. nriy7ou n3awdou 7ta win la zone de recherche tl7e9 1 
+
+terminaison : 
+
+l'algo ykhlas ki tl7e9 la zone de recherche 1, et la meilleur correspondance trouvé a 
+cette etape hiya le meilleur vecteur de mouvement 
+
+
+ALGORITHME DU CODE :
+
+MSE: 
+fonction qui calcule mean squared error entre 2 blocs d'image .
+
+DICHOTOMIQUE-SEARCH : 
+
+target-bloc : la premiere image li ndirou biha recherche
+searching-image : la 2eme li ndiroulha search 
+x et y : coordonné de depart 
+BS : taille du bloc = 16 kima f l'algorithme 
+DELTA : un decalage li ndirkaliw bih la zone de recherche 
+
+init: 
+step : taille du pas initial 
+min-mse : valeur minimal du mse =inf
+coord-x coord-y : les coordonné de depart de la recherche avec decalage 
+min-x, mix-y : la mse min qui a été trouvé jusqu'a present 
+min-bloc : le bloc correspondant a la mse min 
+
+boucle de recherche : 
+* la boucle dir recherche en ajustant la taille du step chaque itération 7ta tl7e9 1 
+* chaque iteration la recherche tndar 3la plusieur mouveemnt 
+* pour chaque mouevemnt n7sbou mse bin bloc cible ou bloc actuel te recherche 
+* ida mse kan sghir 3la mse-min =li nl9aweh, les coordoné te3 le bloc nbdlouhoum
+
+a la fin nretourniw min_bloc m3a les coordonné te3ha min-x ou min-y m3a le mse minimal 
+
+
+
+les fonction : 
+
+show_similarities :
+Cette fonction prend une image, une liste de blocs, une taille de bloc (bs), et un mode en entrée.
+Elle parcourt la liste de blocs et dessine des rectangles sur l'image originale autour de ces blocs.
+Enregistre l'image modifiée dans un fichier et l'affiche à l'aide de OpenCV.
+Retourne l'image modifiée.
+
+show_residues :
+Prend une deuxième image, une liste de blocs, une taille de bloc (bs), et un mode en entrée.
+Crée une copie de l'image originale.
+Parcourt la liste de blocs et met à zéro les pixels correspondants aux blocs sur la copie de l'image.
+Enregistre l'image modifiée dans un fichier et l'affiche à l'aide de OpenCV.
+Retourne l'image modifiée.
+
+process_images :
+Prend deux images (im1 et im2), une valeur de décalage (DELTA), et un indicateur de rembourrage en entrée.
+Convertit les images en niveaux de gris.
+Si le rembourrage est activé, ajoute une marge de DELTA autour de l'image 1.
+Retourne les deux images modifiées.
+
+
+
+MAIN : 
+
+with_dichotomic(im1, im2, threshold=50, size=16, decalage=64)
+Cette fonction prend les paramètres suivants :
+im1: La première image.
+im2: La deuxième image.
+threshold: La valeur seuil pour déterminer si deux blocs sont considérés comme similaires.
+size: La taille des blocs utilisée pour la recherche.
+decalage: La valeur du décalage utilisée pour le rembourrage.
+
+Fonctionnement :
+Conversion en niveaux de gris :
+Les deux images (im1 et im2) sont converties en niveaux de gris à l'aide de cv2.cvtColor.
+Rembourrage de l'image1 :
+
+L'image1 est rembourrée avec une valeur constante en utilisant cv2.copyMakeBorder. Le rembourrage est 
+effectué autour de l'image pour permettre une recherche de blocs dans les zones périphériques.
+
+Initialisation de la liste des blocs :
+Une liste vide list_of_blocs est initialisée pour stocker les coordonnées des blocs similaires.
+
+Boucle à travers les blocs :
+Une double boucle est utilisée pour parcourir l'image2 avec des pas de taille size.
+Pour chaque bloc (target_bloc) extrait de l'image2, la fonction Search.dichotomique_search est appelée pour trouver le bloc similaire dans l'image1.
+Si la mesure de similarité (min_mse) entre les deux blocs est inférieure au seuil spécifié, les coordonnées du bloc similaire sont ajoutées à list_of_blocs.
+
+Affichage des résultats :
+Le temps de recherche est mesuré.
+Les blocs similaires sont utilisés pour afficher les similitudes et les résidus entre les images en appelant 
+les fonctions Fonctionalities.show_similarities et Fonctionalities.show_residues.
+Les images modifiées sont affichées et enregistrées dans des fichiers avec le suffixe "log".
+
+Fin de l'exécution :
+Un message est affiché indiquant la fin du processus.
+
+
+
+
+
+
+
