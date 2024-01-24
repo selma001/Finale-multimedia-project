@@ -6,7 +6,7 @@ init :
 zone de recherche definie par K.
 dans chaque iteration 9 positions sont evalué .
 la premiere evaluation se fait au centre de la zone de recherche .
-et les huit autres qont des vercteurs avec fraction de k .
+et les huit autres ont des vecteurs avec fraction de k .
 
 1ere iteration : 
 

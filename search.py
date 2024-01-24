@@ -8,9 +8,9 @@ class Search:
         difference = np.square(bloc_1-bloc_2)
         return np.sum(difference)/(x*y)
 
-    def dichotomique_search(target_bloc, searching_image, x, y, size=16, decalage=64) -> np.ndarray:
+    def dichotomique_search(target_bloc, searching_image, x, y, size=16, decalage=32) -> np.ndarray:
 
-        pas = 32
+        pas = 16
         min_mse = inf
 
         coord_x = x+decalage
